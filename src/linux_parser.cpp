@@ -12,8 +12,6 @@ using std::string;
 using std::to_string;
 using std::vector;
 
-//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
-
 string LinuxParser::OperatingSystem() {
   string line;
   string key;
@@ -121,25 +119,7 @@ long LinuxParser::ActiveJiffies(int pid) {
   float totalTime =
       (stof(words[13]) + stof(words[14]) + stof(words[15]) + stof(words[16]));
 
-  
-  long hertz = sysconf(_SC_CLK_TCK);
-  
-  float starttimeinseconds = stof(words[21]) / sysconf(_SC_CLK_TCK);
-
-  long _upTime = LinuxParser::UpTime();
-
-  float elapsedSeconds = (float)_upTime - (stof(words[21]) / sysconf(_SC_CLK_TCK));
-  
-  stream.close();
-
-  // Avoid divide by 0
-  if (totalTime > 0) {
-    utilization = (totalTime / sysconf(_SC_CLK_TCK)) / elapsedSeconds;
-  } else {
-    utilization = 0.0;
-  }
-
-  return (long)utilization;
+  return totalTime / sysconf(_SC_CLK_TCK);
 }
 
 //**********************************************************************//

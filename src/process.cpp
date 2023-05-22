@@ -17,7 +17,7 @@ using std::vector;
 int Process::Pid() { return pid; }
 
 // TODO: Return this process's CPU utilization
-float Process::CpuUtilization() { 
+float Process::CpuUtilization() const { 
   
   long seconds = LinuxParser::UpTime(pid);
   long totaltime = LinuxParser::ActiveJiffies(pid);
@@ -27,22 +27,19 @@ float Process::CpuUtilization() {
 }
 
 // Return the command that generated this process
-string Process::Command() { return command; }
+string Process::Command() { return LinuxParser::Command(pid); }
 
 // Return this process's memory utilization
-string Process::Ram() { return ram; }
+string Process::Ram() { return LinuxParser::Ram(pid); }
 
 // Return the user (name) that generated this process
-string Process::User() { return user; }
+string Process::User() { 
+  string uid = LinuxParser::Uid(pid);
+  return LinuxParser::User(stoi(uid)); 
+}
 
 // Return the age of this process (in seconds)
-long int Process::UpTime() { return upTime; }
+long int Process::UpTime() { return LinuxParser::UpTime(pid); }
 
 // Overload the "less than" comparison operator for Process objects
-bool Process::operator<(Process const& a) const {
-  if (cpuUtilization < a.cpuUtilization) {
-    return true;
-  } else {
-    return false;
-  }
-}
+bool Process::operator<(Process const& a) const { return CpuUtilization() < a.CpuUtilization(); }

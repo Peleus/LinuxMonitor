@@ -25,20 +25,10 @@ vector<Process>& System::Processes() {
   vector<int> pids = LinuxParser::Pids();
 
   for (auto& thisPid : pids) {
-    std::string thisUid{LinuxParser::Uid(thisPid)};
-    std::string thisUser{LinuxParser::User(stoi(thisUid))};
-    std::string thisCommand{LinuxParser::Command(thisPid)};
-    std::string thisRam{LinuxParser::Ram(thisPid)};
-    long int thisUptime{LinuxParser::UpTime(thisPid)};
-    float thisCpu{LinuxParser::ActiveJiffies(thisPid)};
-    Process process =
-        Process(thisPid, thisUser, thisRam, thisUptime, thisCommand, thisCpu);
-
+    Process process = Process(thisPid);
     processes_.insert(processes_.begin(), process);
   }
-
   sort(processes_.begin(), processes_.end(), [] (Process& a, Process& b) { return a<b; });
-
   return processes_;
 }
 

@@ -105,7 +105,6 @@ long LinuxParser::ActiveJiffies(int pid) {
   string word;
   string line;
   vector<string> words;
-  float utilization{0};
   std::ifstream stream(kProcDirectory + to_string(pid) + kStatFilename);
   if (stream.is_open()) {
     std::getline(stream, line);
@@ -116,10 +115,12 @@ long LinuxParser::ActiveJiffies(int pid) {
     }
   }
 
-  float totalTime =
+  long totalTime =
       (stof(words[13]) + stof(words[14]) + stof(words[15]) + stof(words[16]));
 
-  return totalTime / sysconf(_SC_CLK_TCK);
+  long value = totalTime / sysconf(_SC_CLK_TCK);
+
+  return value;
 }
 
 //**********************************************************************//
